@@ -9,13 +9,21 @@ public class Game {
     public int questionsAsked = 0;
     int moneyWon = 0;
     Scanner keyboard = new Scanner(System.in);
-    ConsoleOutput output = new ConsoleOutput();
+    Output output;
     Random random = new Random();
 
     public Display display = new Display();
 
     public void setInput(Scanner sc){
         this.keyboard = sc;
+    }
+
+    public void setOutput(Output output){
+        this.output = output;
+    }
+
+    public void setGameHasFinished(boolean Boolean){
+        this.gameHasFinished = Boolean;
     }
 
     public void answerChecker(){
@@ -191,6 +199,8 @@ public class Game {
     }
 
     public void startUp() {
+        ConsoleOutput consoleOutput = new ConsoleOutput();
+        setOutput(consoleOutput);
         display.mainMenu();
         int choice = display.getTheChoice(1, 2);
         if (choice == 1) {
