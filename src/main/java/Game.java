@@ -7,7 +7,7 @@ public class Game {
     boolean hasAskedAudience = false;
     boolean hasDone5050 = false;
     public int questionsAsked = 0;
-    int moneyWon = 0;
+    private int moneyWon = 0;
     Scanner keyboard = new Scanner(System.in);
     Output output;
     Random random = new Random();
@@ -22,39 +22,66 @@ public class Game {
         this.output = output;
     }
 
+    public void setHasAskedAudience(boolean hasAskedAudience) {
+        this.hasAskedAudience = hasAskedAudience;
+    }
+
+    public void setHasDone5050(boolean hasDone5050) {
+        this.hasDone5050 = hasDone5050;
+    }
+
+    public void setHasPhonedFriend(boolean hasPhonedFriend) {
+        this.hasPhonedFriend = hasPhonedFriend;
+    }
+
     public void setGameHasFinished(boolean Boolean){
         this.gameHasFinished = Boolean;
     }
+
+    public void setHasAnsweredIncorrectly(boolean Boolean){this.hasAnsweredIncorrectly = Boolean;}
 
     public void answerChecker(){
         if(!(display.correctAnswerNumber == keyboard.nextInt())){
             hasAnsweredIncorrectly = true;
         }else{
-            display.answeredCorrectly();
-            if(questionsAsked != 1){
-                moneyWon *= 2;
-            } else {
-                moneyWon += 100;
-            }
+            correctAnswer();
         }
 
+    }
+
+    public void correctAnswer(){
+        display.answeredCorrectly();
+        if(questionsAsked > 1){
+            setMoneyWon(moneyWon*2);
+        } else {
+            setMoneyWon(100);
+        }
+    }
+
+    public int getMoneyWon(){
+        return this.moneyWon;
+    }
+
+    public void setMoneyWon(int money){
+        this.moneyWon = money;
     }
 
     public void firstRound(){
         display.firstQuestion();
         questionsAsked += 1;
-        if(!hasDone5050 | !hasAskedAudience | !hasPhonedFriend){
+        if(!hasUsedLifelines()){
             willYouUseLifeline();
         } else{
             output.outputString("Okay what are you going with?");
         }
         answerChecker();
+        System.out.println(getMoneyWon());
     }
 
     public void secondRound(){
         display.threeQuestionsAsked();
         questionsAsked+=1;
-        if(!hasDone5050 | !hasAskedAudience | !hasPhonedFriend){
+        if(!hasUsedLifelines()){
             willYouUseLifeline();
         } else{
           output.outputString("Okay what are you going with?");
@@ -62,15 +89,19 @@ public class Game {
         answerChecker();
     }
 
+    public boolean hasUsedLifelines(){
+        return hasDone5050 & hasAskedAudience & hasPhonedFriend;
+    }
+
     public void finalRound(){
         display.finalQuestion();
-        if(!hasDone5050 | !hasAskedAudience | !hasPhonedFriend){
+        if(!hasUsedLifelines()){
             willYouUseLifeline();
         } else{
             output.outputString("Okay what are you going with?");
         }
         answerChecker();
-        gameHasFinished = true;
+        setGameHasFinished(true);
     }
 
     public void askAudience(){

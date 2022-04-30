@@ -28,4 +28,8 @@ public class TestOutput implements Output {
         }
     }
 
+    public List<String> getDisplayValues(){
+        return displayValues;
+    }
+
 }

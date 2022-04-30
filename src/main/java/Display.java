@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Display {
 
-    ConsoleOutput output = new ConsoleOutput();
+    private Output output;
     CSVreader reader = new CSVreader();
     Scanner keyboard = new Scanner(System.in);
     String questionBeingAsked = "";
@@ -11,7 +11,19 @@ public class Display {
     List<String> outputs = new ArrayList<>();
 
 
+    public Display(){
+        this.output = new ConsoleOutput();
+    }
+
     private List<String> questionsThatHaveBeenAsked = new ArrayList<>();
+
+    public void setOutput(Output output){
+        this.output = output;
+    }
+
+    public Output getOutput(){
+        return this.output;
+    }
 
     public void mainMenu(){
         outputs.add("Hello and welcome!");
