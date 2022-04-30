@@ -4,17 +4,18 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class GameTest {
 
     Game game = new Game();
+    TestOutput testOutput = new TestOutput();
 
     @Test
     public void doesQuestionGetRecorded(){
         Scanner mockScanner = mock(Scanner.class);
         game.setInput(mockScanner);
+        game.setOutput(testOutput);
         when(mockScanner.nextLine()).thenReturn("1");
         when(mockScanner.nextInt()).thenReturn(1);
         assertEquals(0,game.questionsAsked);
@@ -26,6 +27,7 @@ public class GameTest {
     public void doesGameGetFinished(){
         Scanner mockScanner = mock(Scanner.class);
         game.setInput(mockScanner);
+        game.setOutput(testOutput);
         when(mockScanner.nextInt()).thenReturn(1);
         assertEquals(false,game.gameHasFinished);
         game.finalRound();
@@ -36,6 +38,7 @@ public class GameTest {
     public void doesAudienceGetAsked(){
         Scanner mockScanner = mock(Scanner.class);
         game.setInput(mockScanner);
+        game.setOutput(testOutput);
         when(mockScanner.nextInt()).thenReturn(4);
         assertEquals(false,game.hasAskedAudience);
         game.willYouUseLifeline();
@@ -44,12 +47,28 @@ public class GameTest {
 
     @Test
     public void gameDoesntRunIfFinished(){
-        TestOutput testOutput = new TestOutput();
         game.setOutput(testOutput);
         game.setGameHasFinished(true);
         game.playGame();
 
         assertNull(testOutput.getNextDisplayValue());
-
     }
+
+    @Test
+    public void gameDoesntRunIfAnsweredIncorrectly(){
+        game.setOutput(testOutput);
+        game.setHasAnsweredIncorrectly(true);
+        game.playGame();
+
+        assertNull(testOutput.getNextDisplayValue());
+    }
+    @Test
+    public void doesMoneyGetIncrementedForCorrectAnswer(){
+        game.setOutput(testOutput);
+        int moneyBefore = game.getMoneyWon();
+        game.correctAnswer();
+
+        assertNotEquals(moneyBefore,game.getMoneyWon());
+    }
+
 }
