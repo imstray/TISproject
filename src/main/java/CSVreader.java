@@ -5,10 +5,10 @@ public class CSVreader {
     Map<String, List<String>> theQuestionsAndAnswers = new HashMap<>();
 
     public CSVreader(){
-        getQnAMap();
+        setQnAMap();
     }
 
-    public Map<String, List<String>> getQnAMap(){
+    public void setQnAMap(){
         for(String[] Qna : QnAs.getQuestionsAndAnswers()){
             if (!Objects.equals(Qna[0], "questions")){
             List<String> answers = new ArrayList<>();
@@ -17,13 +17,15 @@ public class CSVreader {
             theQuestionsAndAnswers.put(Qna[0], answers);
         }
         }
+    }
+
+    public Map<String, List<String>> getTheQuestionsAndAnswers() {
         return theQuestionsAndAnswers;
     }
 
     public static void main(String[] args) {
         QnAHandler QnAs = new QnAHandler();
         CSVreader read = new CSVreader();
-        System.out.println(read.getQnAMap());
         System.out.println(read.theQuestionsAndAnswers);
     }
 }

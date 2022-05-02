@@ -3,8 +3,8 @@ import java.util.*;
 public class Display {
 
     private Output output;
-    CSVreader reader = new CSVreader();
-    Scanner keyboard = new Scanner(System.in);
+    CSVreader reader;
+    Scanner keyboard;
     String questionBeingAsked = "";
     public int correctAnswerNumber;
     String correctAnswerString = "";
@@ -13,6 +13,8 @@ public class Display {
 
     public Display(){
         this.output = new ConsoleOutput();
+        this.keyboard = new Scanner(System.in);
+        this.reader = new CSVreader();
     }
 
     private List<String> questionsThatHaveBeenAsked = new ArrayList<>();
@@ -21,6 +23,13 @@ public class Display {
         this.output = output;
     }
 
+    public void setKeyboard(Scanner scanner){
+        this.keyboard = scanner;
+    }
+
+    public void setReader(CSVreader reader){
+        this.reader = reader;
+    }
     public Output getOutput(){
         return this.output;
     }
@@ -47,6 +56,7 @@ public class Display {
     public void phoneAFriend(){
         outputs.add("You have chosen to phone a friend");
         outputs.add("You are calling daniel");
+        createBorder(outputs);
     }
     public void answeredCorrectly(){
         outputs.add("Well done");
@@ -93,7 +103,7 @@ public class Display {
         boolean aQuestionHasBeenAsked = false;
 
         while(!aQuestionHasBeenAsked){
-        for(Map.Entry<String, List<String>> entry:reader.theQuestionsAndAnswers.entrySet()){
+        for(Map.Entry<String, List<String>> entry:reader.getTheQuestionsAndAnswers().entrySet()){
             String question = entry.getKey();
             List<String> answers = entry.getValue();
 
