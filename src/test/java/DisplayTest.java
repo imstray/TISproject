@@ -8,15 +8,13 @@ import static org.mockito.Mockito.*;
 
 public class DisplayTest {
 
-    Display testDisplay = new Display();
+//    Display testDisplay = new Display();
 
     @Test
     public void onlyNumberInBoundsAllowed(){
         TestOutput testOutput = new TestOutput();
-        testDisplay.setOutput(testOutput);
-
         Scanner mockScanner = mock(Scanner.class);
-        testDisplay.setKeyboard(mockScanner);
+        Display testDisplay = new Display(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(1);
         testDisplay.getTheChoice(1,2);
         assertNull(testOutput.getNextDisplayValue());
@@ -26,10 +24,9 @@ public class DisplayTest {
     @Test
     public void numberOutOfBoundsNotAllowed(){
         TestOutput testOutput = new TestOutput();
-        testDisplay.setOutput(testOutput);
 
         Scanner mockScanner = mock(Scanner.class);
-        testDisplay.setKeyboard(mockScanner);
+        Display testDisplay = new Display(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(3).thenReturn(1);
 
         testDisplay.getTheChoice(1,2);
@@ -40,7 +37,7 @@ public class DisplayTest {
     @Test
     public void mainMenuGetsDisplayed(){
         TestOutput testOutput = new TestOutput();
-        testDisplay.setOutput(testOutput);
+        Display testDisplay = new Display(testOutput);
         testDisplay.mainMenu();
         assertTrue(testOutput.displayValues.contains("This is 'Who Wants To Be A Somervillionare'"));
     }
@@ -48,7 +45,7 @@ public class DisplayTest {
     @Test
     public void correctAnswerMessageGetsDisplayed(){
         TestOutput testOutput = new TestOutput();
-        testDisplay.setOutput(testOutput);
+        Display testDisplay = new Display(testOutput);
         testDisplay.answeredCorrectly();
 
         assertTrue(testOutput.displayValues.contains("You got the right answer"));
@@ -57,7 +54,7 @@ public class DisplayTest {
     @Test
     public void aQuestionGetsDisplayed(){
         TestOutput testOutput = new TestOutput();
-        testDisplay.setOutput(testOutput);
+        Display testDisplay = new Display(testOutput);
         Map<String, List<String>> testMap = new HashMap<>();
         List<String> testList = Arrays.asList("Derek Somerville", "Daniel Lyasota", "1");
         testMap.put("Who is this game based on?", testList);

@@ -12,7 +12,7 @@ public class Game {
     Output output = new ConsoleOutput();
     Random random = new Random();
 
-    public Display display = new Display();
+    public Display display = new Display(output, keyboard);
 
     public void setInput(Scanner sc){
         this.keyboard = sc;

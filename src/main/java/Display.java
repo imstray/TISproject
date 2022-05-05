@@ -10,10 +10,15 @@ public class Display {
     String correctAnswerString = "";
     List<String> outputs = new ArrayList<>();
 
-
-    public Display(){
-        this.output = new ConsoleOutput();
+    public Display(Output output){
+        this.output = output;
         this.keyboard = new Scanner(System.in);
+        this.reader = new CSVreader();
+    }
+
+    public Display(Output output, Scanner scanner){
+        this.output = output;
+        this.keyboard = scanner;
         this.reader = new CSVreader();
     }
 
@@ -205,9 +210,9 @@ public class Display {
 
 
     public static void main(String[] args) {
-        Display d = new Display();
-        d.showTheAnswerOptions(d.showAQuestion());
-        System.out.println(d.correctAnswerNumber);
+////        Display d = new Display();
+//        d.showTheAnswerOptions(d.showAQuestion());
+//        System.out.println(d.correctAnswerNumber);
 
     }
 }
