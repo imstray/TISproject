@@ -35,8 +35,9 @@ public class Display {
     public void setReader(CSVreader reader){
         this.reader = reader;
     }
-    public Output getOutput(){
-        return this.output;
+
+    public List<String> getQuestionsThatHaveBeenAsked(){
+        return questionsThatHaveBeenAsked;
     }
 
     public void mainMenu(){

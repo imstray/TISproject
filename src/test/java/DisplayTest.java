@@ -8,8 +8,7 @@ import static org.mockito.Mockito.*;
 
 public class DisplayTest {
 
-//    Display testDisplay = new Display();
-
+    
     @Test
     public void onlyNumberInBoundsAllowed(){
         TestOutput testOutput = new TestOutput();
@@ -67,4 +66,17 @@ public class DisplayTest {
         assertTrue(testOutput.displayValues.contains("Who is this game based on?"));
     }
 
+    @Test
+    public void questionsAskedGetAddedToList(){
+        Display testDisplay = new Display(new TestOutput());
+
+        assertTrue(testDisplay.getQuestionsThatHaveBeenAsked().isEmpty());
+
+        String question1 = testDisplay.showAQuestion();
+        assertTrue(testDisplay.getQuestionsThatHaveBeenAsked().contains(question1));
+
+        String question2 = testDisplay.showAQuestion();
+        assertTrue(testDisplay.getQuestionsThatHaveBeenAsked().contains(question2));
+
+    }
 }

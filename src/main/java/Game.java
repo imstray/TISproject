@@ -8,11 +8,22 @@ public class Game {
     boolean hasDone5050 = false;
     public int questionsAsked = 0;
     private int moneyWon = 0;
-    Scanner keyboard = new Scanner(System.in);
-    Output output = new ConsoleOutput();
+    Scanner keyboard;
+    Output output;
     Random random = new Random();
+    Display display;
 
-    public Display display = new Display(output, keyboard);
+    public Game(Output output, Scanner scanner){
+        setOutput(output);
+        setInput(scanner);
+        this.display = new Display(output, scanner);
+    }
+
+    public Game(Output output){
+        setOutput(output);
+        setInput(new Scanner(System.in));
+        this.display = new Display(output, this.keyboard);
+    }
 
     public void setInput(Scanner sc){
         this.keyboard = sc;
@@ -225,6 +236,7 @@ public class Game {
     }
     public void playGame(){
         while(!hasAnsweredIncorrectly & !gameHasFinished){
+            System.out.println(display.getQuestionsThatHaveBeenAsked());
             switch (questionsAsked) {
                 case 0, 1, 2 -> firstRound();
                 case 3, 4, 5 -> secondRound();
@@ -244,7 +256,7 @@ public class Game {
         }
     }
     public static void main(String[] args) {
-        Game game = new Game();
+        Game game = new Game(new ConsoleOutput());
         game.startUp();
     }
 }

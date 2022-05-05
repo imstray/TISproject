@@ -8,14 +8,12 @@ import static org.mockito.Mockito.*;
 
 public class GameTest {
 
-    Game game = new Game();
 
     @Test
     public void doesQuestionGetRecorded(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
-        game.setInput(mockScanner);
-        game.setOutput(testOutput);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextLine()).thenReturn("1");
         when(mockScanner.nextInt()).thenReturn(1);
         assertEquals(0,game.questionsAsked);
@@ -27,8 +25,7 @@ public class GameTest {
     public void doesGameGetFinished(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
-        game.setInput(mockScanner);
-        game.setOutput(testOutput);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(1);
         assertFalse(game.gameHasFinished);
         game.finalRound();
@@ -39,8 +36,7 @@ public class GameTest {
     public void doesAudienceGetAsked(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
-        game.setInput(mockScanner);
-        game.setOutput(testOutput);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(4);
         assertFalse(game.hasAskedAudience);
         game.willYouUseLifeline();
@@ -51,9 +47,7 @@ public class GameTest {
     public void doesntLetYouChoseLifelineAlreadyUsed(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
-        game.setInput(mockScanner);
-        game.setOutput(testOutput);
-        game.display.setOutput(testOutput);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(4).thenReturn(1);
         game.setHasAskedAudience(true);
         game.willYouUseLifeline();
@@ -64,6 +58,7 @@ public class GameTest {
     @Test
     public void gameDoesntRunIfFinished(){
         TestOutput testOutput = new TestOutput();
+        Game game = new Game(testOutput);
         game.setOutput(testOutput);
         game.setGameHasFinished(true);
         game.playGame();
@@ -74,6 +69,7 @@ public class GameTest {
     @Test
     public void gameDoesntRunIfAnsweredIncorrectly(){
         TestOutput testOutput = new TestOutput();
+        Game game = new Game(testOutput);
         game.setOutput(testOutput);
         game.setHasAnsweredIncorrectly(true);
         game.playGame();
@@ -83,7 +79,7 @@ public class GameTest {
     @Test
     public void doesMoneyGetIncrementedForCorrectAnswer(){
         TestOutput testOutput = new TestOutput();
-        game.setOutput(testOutput);
+        Game game = new Game(testOutput);
         int moneyBefore = game.getMoneyWon();
         game.correctAnswer();
 
@@ -94,10 +90,8 @@ public class GameTest {
     public void gamePlaysFromStartToFinish(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(1);
-        game.setInput(mockScanner);
-        game.display.setKeyboard(mockScanner);
-        game.display.setOutput(testOutput);
         game.startUp();
 
         assertTrue(testOutput.getDisplayValues().contains("Thank you for your time. Hopefully you enjoyed."));
@@ -107,10 +101,8 @@ public class GameTest {
     public void gameDoesntStartIfInputIs2(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(2);
-        game.setInput(mockScanner);
-        game.display.setKeyboard(mockScanner);
-        game.setOutput(testOutput);
         game.startUp();
 
         assertEquals("why are you here then.", testOutput.getNextDisplayValue());
@@ -121,9 +113,8 @@ public class GameTest {
     public void displaysWinnerMessageIfYouWin(){
         TestOutput testOutput = new TestOutput();
         Scanner mockScanner = mock(Scanner.class);
+        Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(1);
-        game.display.setKeyboard(mockScanner);
-        game.display.setOutput(testOutput);
         game.setGameHasFinished(true);
         game.startUp();
 
