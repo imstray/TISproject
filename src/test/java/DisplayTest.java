@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 
 public class DisplayTest {
 
-    
+
     @Test
     public void onlyNumberInBoundsAllowed(){
         TestOutput testOutput = new TestOutput();
@@ -77,6 +77,30 @@ public class DisplayTest {
 
         String question2 = testDisplay.showAQuestion();
         assertTrue(testDisplay.getQuestionsThatHaveBeenAsked().contains(question2));
+
+    }
+
+    @Test
+    public void questionDoesNotGetAskedIfAlreadyBeenAsked(){
+        Display testDisplay = new Display(new TestOutput());
+        CSVreader mockReader = mock(CSVreader.class);
+        Map<String, List<String>> testMap = new HashMap<>();
+        List<String> testList1 = Arrays.asList("Derek Somerville", "Daniel Lyasota", "1");
+        testMap.put("Who is this game based on?", testList1);
+        List<String> testList2 = Arrays.asList("Derek Somerville", "Daniel Lyasota", "1");
+        testMap.put("Who is really enjoying this game?", testList2);
+        testDisplay.setReader(mockReader);
+        when(mockReader.getTheQuestionsAndAnswers()).thenReturn(testMap);
+
+        /* essentially only 2 questions are inserted by the end even though it goes through all
+           questions. It will not add another question, meaning it doesnt get asked again.
+
+        */
+        testDisplay.showAQuestion();
+        assertEquals(1, testDisplay.getQuestionsThatHaveBeenAsked().size());
+
+        testDisplay.showAQuestion();
+        assertEquals(2, testDisplay.getQuestionsThatHaveBeenAsked().size());
 
     }
 }
