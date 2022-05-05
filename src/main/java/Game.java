@@ -9,7 +9,7 @@ public class Game {
     public int questionsAsked = 0;
     private int moneyWon = 0;
     Scanner keyboard = new Scanner(System.in);
-    Output output;
+    Output output = new ConsoleOutput();
     Random random = new Random();
 
     public Display display = new Display();
@@ -40,12 +40,16 @@ public class Game {
 
     public void setHasAnsweredIncorrectly(boolean Boolean){this.hasAnsweredIncorrectly = Boolean;}
 
+    public void setQuestionsAsked(int questionsAsked){
+        this.questionsAsked = questionsAsked;
+    }
     public void answerChecker(){
         if(!(display.correctAnswerNumber == keyboard.nextInt())){
             hasAnsweredIncorrectly = true;
         }else{
             correctAnswer();
         }
+        System.out.println(keyboard.nextInt());
 
     }
 
@@ -75,7 +79,7 @@ public class Game {
             output.outputString("Okay what are you going with?");
         }
         answerChecker();
-        System.out.println(getMoneyWon());
+
     }
 
     public void secondRound(){
@@ -230,24 +234,15 @@ public class Game {
     }
 
     public void startUp() {
-        ConsoleOutput consoleOutput = new ConsoleOutput();
-        setOutput(consoleOutput);
         display.mainMenu();
         int choice = display.getTheChoice(1, 2);
         if (choice == 1) {
             playGame();
-
-            if (hasAnsweredIncorrectly) {
-                display.answeredIncorrectly();
-            } else {
-                output.outputString("Congrats you managed to win $" + moneyWon);
-                display.winnerScreen();
-
-            }
+            display.endMessage(hasAnsweredIncorrectly, moneyWon);
+        } else{
+            output.outputString("why are you here then.");
         }
-        output.outputString("Thank you for your time.");
     }
-
     public static void main(String[] args) {
         Game game = new Game();
         game.startUp();

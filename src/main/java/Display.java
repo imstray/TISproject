@@ -99,6 +99,16 @@ public class Display {
         showTheAnswerOptions(showAQuestion());
     }
 
+    public void endMessage(boolean hasAnsweredIncorrectly, int moneyWon){
+        if(hasAnsweredIncorrectly) {
+            answeredIncorrectly();
+        } else {
+            outputs.add("Congratulations you managed to win a whopping " + moneyWon + " Somerville Bux");
+            winnerScreen();
+        }
+        output.outputString("Thank you for your time. Hopefully you enjoyed.");
+    }
+
     public String showAQuestion(){
         boolean aQuestionHasBeenAsked = false;
 
