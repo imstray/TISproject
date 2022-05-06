@@ -2,35 +2,83 @@ import java.util.*;
 
 public class Game {
     public boolean hasAnsweredIncorrectly = false;
-    boolean gameHasFinished = false;
-    boolean hasPhonedFriend = false;
-    boolean hasAskedAudience = false;
-    boolean hasDone5050 = false;
-    public int questionsAsked = 0;
+    private boolean gameHasFinished = false;
+    private boolean hasPhonedFriend = false;
+    private boolean hasAskedAudience = false;
+    private boolean hasDone5050 = false;
+    private int questionsAsked = 0;
     private int moneyWon = 0;
-    Scanner keyboard;
-    Output output;
-    Random random = new Random();
-    Display display;
+    private Scanner keyboard;
+    private Output output;
+    private Random random = new Random();
+    private Display display;
 
     public Game(Output output, Scanner scanner){
         setOutput(output);
-        setInput(scanner);
-        this.display = new Display(output, scanner);
+        setKeyboard(scanner);
+        this.display = new Display(getOutput(), getKeyboard());
     }
 
     public Game(Output output){
         setOutput(output);
-        setInput(new Scanner(System.in));
-        this.display = new Display(output, this.keyboard);
+        setKeyboard(new Scanner(System.in));
+        setDisplay(new Display(getOutput(), getKeyboard()));
     }
 
-    public void setInput(Scanner sc){
+    public void setKeyboard(Scanner sc){
         this.keyboard = sc;
+    }
+
+    public Scanner getKeyboard(){
+        return this.keyboard;
     }
 
     public void setOutput(Output output){
         this.output = output;
+    }
+
+    public Output getOutput(){
+        return this.output;
+    }
+
+    public void setDisplay(Display display) {
+        this.display = display;
+    }
+
+    public Display getDisplay(){
+        return this.display;
+    }
+
+    public boolean getHasAnsweredIncorrectly() {
+        return hasAnsweredIncorrectly;
+    }
+
+    public boolean getGameHasFinished() {
+        return gameHasFinished;
+    }
+
+    public boolean getHasPhonedFriend() {
+        return hasPhonedFriend;
+    }
+
+    public boolean getHasAskedAudience() {
+        return hasAskedAudience;
+    }
+
+    public boolean getHasDone5050() {
+        return hasDone5050;
+    }
+
+    public int getQuestionsAsked() {
+        return questionsAsked;
+    }
+
+    public int getMoneyWon(){
+        return this.moneyWon;
+    }
+
+    public void setMoneyWon(int money){
+        this.moneyWon = money;
     }
 
     public void setHasAskedAudience(boolean hasAskedAudience) {
@@ -54,14 +102,17 @@ public class Game {
     public void setQuestionsAsked(int questionsAsked){
         this.questionsAsked = questionsAsked;
     }
+
+    public boolean hasUsedLifelines(){
+        return hasDone5050 & hasAskedAudience & hasPhonedFriend;
+    }
+
     public void answerChecker(){
         if(!(display.correctAnswerNumber == keyboard.nextInt())){
             hasAnsweredIncorrectly = true;
         }else{
             correctAnswer();
         }
-        System.out.println(keyboard.nextInt());
-
     }
 
     public void correctAnswer(){
@@ -73,16 +124,8 @@ public class Game {
         }
     }
 
-    public int getMoneyWon(){
-        return this.moneyWon;
-    }
-
-    public void setMoneyWon(int money){
-        this.moneyWon = money;
-    }
-
     public void firstRound(){
-        display.firstQuestion();
+        display.firstRound();
         questionsAsked += 1;
         if(!hasUsedLifelines()){
             willYouUseLifeline();
@@ -94,7 +137,7 @@ public class Game {
     }
 
     public void secondRound(){
-        display.threeQuestionsAsked();
+        display.secondRound();
         questionsAsked+=1;
         if(!hasUsedLifelines()){
             willYouUseLifeline();
@@ -104,12 +147,20 @@ public class Game {
         answerChecker();
     }
 
-    public boolean hasUsedLifelines(){
-        return hasDone5050 & hasAskedAudience & hasPhonedFriend;
+    public void thirdRound(){
+        display.thirdRound();
+        questionsAsked+=1;
+        if(!hasUsedLifelines()){
+            willYouUseLifeline();
+        } else{
+            output.outputString("Okay what are you going with?");
+        }
+        answerChecker();
     }
 
+
     public void finalRound(){
-        display.finalQuestion();
+        display.finalQuestion(getMoneyWon());
         if(!hasUsedLifelines()){
             willYouUseLifeline();
         } else{
@@ -162,9 +213,10 @@ public class Game {
     public int friendsChoice(Friend f) {
         int friendRecommendation = 0;
         int answer = display.correctAnswerNumber;
-        switch (f.intelligence) {
+        switch (f.getIntelligence()) {
             case 1:
                 friendRecommendation = random.nextInt(1, 4);
+                output.outputString(f.getName() + " isn't the brightest of cookies...");
                 break;
 
             case 2:
@@ -175,7 +227,7 @@ public class Game {
                 } else{
                     friendRecommendation = random.nextInt(answer-1,answer+1);
                 }
-
+                output.outputString(f.getName() + " is probably trying to get lucky with their guess");
                 break;
 
             case 3:
@@ -184,7 +236,12 @@ public class Game {
                     case 4 -> random.nextInt(answer - 1, answer);
                     default -> friendRecommendation;
                 };
-
+                output.outputString(f.getName() + " is quite confident they've chosen right");
+                break;
+            case 4:
+                friendRecommendation = answer;
+                output.outputString(f.getName() + " is adamant that they know this one, they will be upset if you don't listen to them");
+                break;
             }
         return friendRecommendation;
     }
@@ -192,8 +249,10 @@ public class Game {
     public void phoneAFriend(){
         display.phoneAFriend();
         Friend friend = new Friend();
+        String friendsName = keyboard.next();
+        friend.setName(friendsName);
         int recommendation = friendsChoice(friend);
-        output.outputString("Your friend has made their decision");
+        output.outputString(friend.getName() + " has made their decision");
         output.outputString("Your friend thinks it could be " + recommendation);
         hasPhonedFriend = true;
     }
@@ -236,11 +295,11 @@ public class Game {
     }
     public void playGame(){
         while(!hasAnsweredIncorrectly & !gameHasFinished){
-            System.out.println(display.getQuestionsThatHaveBeenAsked());
             switch (questionsAsked) {
                 case 0, 1, 2 -> firstRound();
                 case 3, 4, 5 -> secondRound();
-                case 6 -> finalRound();
+                case 6, 7, 8 -> thirdRound();
+                case 9 -> finalRound();
             }
         }
     }

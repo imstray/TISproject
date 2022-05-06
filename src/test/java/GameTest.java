@@ -16,9 +16,9 @@ public class GameTest {
         Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextLine()).thenReturn("1");
         when(mockScanner.nextInt()).thenReturn(1);
-        assertEquals(0,game.questionsAsked);
+        assertEquals(0,game.getQuestionsAsked());
         game.firstRound();
-        assertEquals(1,game.questionsAsked);
+        assertEquals(1,game.getQuestionsAsked());
     }
 
     @Test
@@ -27,9 +27,9 @@ public class GameTest {
         Scanner mockScanner = mock(Scanner.class);
         Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(1);
-        assertFalse(game.gameHasFinished);
+        assertFalse(game.getGameHasFinished());
         game.finalRound();
-        assertTrue(game.gameHasFinished);
+        assertTrue(game.getGameHasFinished());
     }
 
     @Test
@@ -38,9 +38,9 @@ public class GameTest {
         Scanner mockScanner = mock(Scanner.class);
         Game game = new Game(testOutput, mockScanner);
         when(mockScanner.nextInt()).thenReturn(4);
-        assertFalse(game.hasAskedAudience);
+        assertFalse(game.getHasAskedAudience());
         game.willYouUseLifeline();
-        assertTrue(game.hasAskedAudience);
+        assertTrue(game.getHasAskedAudience());
     }
 
     @Test
@@ -119,5 +119,18 @@ public class GameTest {
         game.startUp();
 
         assertTrue(testOutput.getDisplayValues().contains("I hope you enjoy yourself"));
+    }
+
+    @Test void smartestFriendAlwaysGetsAnswerRight(){
+        TestOutput testOutput = new TestOutput();
+        Scanner mockScanner = mock(Scanner.class);
+        Game game = new Game(testOutput, mockScanner);
+        game.getDisplay().showAQuestion();
+
+        Friend testFriend = new Friend();
+        testFriend.setIntelligence(4);
+        int choice = game.friendsChoice(testFriend);
+
+        assertEquals(choice, game.getDisplay().correctAnswerNumber);
     }
 }

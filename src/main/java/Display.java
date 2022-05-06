@@ -61,7 +61,7 @@ public class Display {
 
     public void phoneAFriend(){
         outputs.add("You have chosen to phone a friend");
-        outputs.add("You are calling daniel");
+        outputs.add("what is the name of your friend ?");
         createBorder(outputs);
     }
     public void answeredCorrectly(){
@@ -83,23 +83,33 @@ public class Display {
         createBorder(outputs);
     }
 
-    public void firstQuestion(){
+    public void firstRound(){
         outputs.add("Okay, I hope you're ready to play");
         outputs.add("Here we go, your question is coming up");
         createBorder(outputs);
         showTheAnswerOptions(showAQuestion());
     }
 
-    public void threeQuestionsAsked(){
+    public void secondRound(){
         outputs.add("You're doing great");
         outputs.add("Let's see how much further you can get.");
         createBorder(outputs);
         showTheAnswerOptions(showAQuestion());
     }
 
-    public void finalQuestion(){
+    public void thirdRound(){
+        outputs.add("Wow, you're closing into that grand prize");
+        outputs.add("I have so much faith in you right now");
+        createBorder(outputs);
+        showTheAnswerOptions(showAQuestion());
+    }
+
+
+
+    public void finalQuestion(int moneyWon){
         outputs.add("This is it");
-        outputs.add("For a chance to win a private holiday with derek himself.");
+        outputs.add("so far you've managed to win " + moneyWon + " Somerville bux");
+        outputs.add("For a chance to win a private holiday with derek himself, and double your bux!");
         outputs.add("Answer the following question correctly");
         createBorder(outputs);
         showTheAnswerOptions(showAQuestion());
